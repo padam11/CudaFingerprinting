@@ -4,12 +4,11 @@
 #include <string.h>
 #include <math.h>
 
-// includes, project
 #include "cufft.h"
 #include "globals.h"
 #include "../include/fft_transform.h"
 
-__device__ unsigned long computeHash_CUDA(int f1, int f2, int f3, int f4){
+__device__ unsigned long computeHash(int f1, int f2, int f3, int f4){
     
       const unsigned long FUZ_FACTOR = 3;
 
@@ -22,7 +21,7 @@ __device__ unsigned long computeHash_CUDA(int f1, int f2, int f3, int f4){
       return result;
 }
 
-__global__ void tranformToHashes_CUDA(Complex * input, int numChunks, unsigned long * outputHashes){
+__global__ void tranformToHashes(Complex * input, int numChunks, unsigned long * outputHashes){
     
     int FREQ_RANGES[5] = { 40, 80, 120, 180, 300 };
 
@@ -54,15 +53,15 @@ __global__ void tranformToHashes_CUDA(Complex * input, int numChunks, unsigned l
           if((binFreq >= FREQ_RANGES[3] && binFreq < FREQ_RANGES[4]) && binMag > f4val ) { f4 = binFreq; f4val = binMag; }
         }
 
-        unsigned long hash = computeHash_CUDA(f1, f2, f3, f4);
+        unsigned long hash = computeHash(f1, f2, f3, f4);
 
         //STEP 3: Hash all of the top 4 frequencies
-        (outputHashes)[i] = computeHash_CUDA(f1, f2, f3, f4);
+        (outputHashes)[i] = computeHash(f1, f2, f3, f4);
 
     }
 }
 
-void audioToHashes_CUDA(Complex * input, int numChunks, unsigned long ** outputHashes){
+void audioToHashes(Complex * input, int numChunks, unsigned long ** outputHashes){
 
     *outputHashes = (unsigned long *) malloc( sizeof(unsigned long) * numChunks);
 

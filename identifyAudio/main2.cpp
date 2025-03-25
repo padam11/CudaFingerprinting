@@ -3,8 +3,8 @@
 #include <string.h>
 
 #include "../include/globals.h"
-//#include "../include/preprocess.h"
-//#include "../include/fft_transform.h"
+#include "../include/preprocess.h"
+#include "../include/fft_transform.h"
 #include "../include/database.h"
 
 int main(int argc, char *argv[])
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 
     unsigned long * hashes;
 
-    //audioToHashes(audio, numChunks. &hashes);
+    audioToHashes(audio, numChunks, &hashes);
 
     //step 4: find matching song from database object using
     //        hashes we computed
